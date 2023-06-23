@@ -1,14 +1,14 @@
+import { pokeApi } from '@/api';
 import { Layout } from '@/components/layouts';
+import { Pokemon } from '@/interfaces';
 import { GetStaticProps, NextPage, GetStaticPaths } from 'next';
 import { useRouter } from 'next/router';
 
 interface Props {
-  // pokemon: any;
-  id: string;
-  name: string;
+  pokemon: Pokemon;
 }
 
-const PokemonPage: NextPage<Props> = ({ id, name }) => {
+const PokemonPage: NextPage<Props> = ({ pokemon }) => {
   const router = useRouter();
 
   return (
@@ -21,29 +21,23 @@ const PokemonPage: NextPage<Props> = ({ id, name }) => {
 };
 
 export const getStaticPaths: GetStaticPaths = async (ctx) => {
+  const pokemon151 = [...Array(151)].map((value, index) => `${index + 1}`);
+
   return {
-    paths: [
-      {
-        params: { id: '1' },
-      },
-      {
-        params: { id: '2' },
-      },
-      {
-        params: { id: '3' },
-      },
-    ],
+    paths: pokemon151.map((id) => ({
+      params: { id },
+    })),
     fallback: false,
   };
 };
 
-export const getStaticProps: GetStaticProps = async (ctx) => {
-  // const { data } = await pokeApi.get<PokemonListResponse>('/pokemon?limit=151');
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  const { id } = params as { id: string };
+  const { data } = await pokeApi.get<Pokemon>(`/pokemon/${id}`);
 
   return {
     props: {
-      id: 1,
-      name: 'bulbasaur',
+      pokemon: data,
     },
   };
 };
