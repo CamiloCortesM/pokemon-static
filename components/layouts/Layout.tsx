@@ -8,6 +8,8 @@ interface LayoutProps {
   title?: string;
 }
 
+const origin = typeof window === 'undefined' ? '' : window.location.origin;
+
 export const Layout: FC<LayoutProps> = ({ children, title }) => {
   return (
     <>
@@ -16,9 +18,16 @@ export const Layout: FC<LayoutProps> = ({ children, title }) => {
         <meta name="author" content="Camilo Cortes" />
         <meta
           name="description"
-          content={`Informacion sobre el pokemon ${title}`}
+          content={`Information about the pokemon ${title}`}
         />
         <meta name="keywords" content={`${title},pokemon,pokedex`} />
+
+        <meta property="og:title" content={`information about ${title}`} />
+        <meta
+          property="og:description"
+          content={`this is the page about ${title}`}
+        />
+        <meta property="og:image" content={`${origin}/img/banner.png`} />
       </Head>
 
       <Navbar />
