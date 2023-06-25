@@ -126,9 +126,17 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { name } = params as { name: string };
   const { data } = await pokeApi.get<Pokemon>(`/pokemon/${name}`);
 
+  const { id, sprites } = data;
+
+  const pokemon = {
+    id,
+    name,
+    sprites,
+  };
+
   return {
     props: {
-      pokemon: data,
+      pokemon,
     },
   };
 };
